@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Tracker</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/frappe-gantt/0.5.0/frappe-gantt.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f9f9f9;
+      }
+      h1 {
+        margin-top: 0;
+      }
+      select,
+      button,
+      input {
+        margin: 5px;
+        padding: 6px 10px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+      }
+      #gantt {
+        margin-top: 20px;
+      }
+      .form-inline {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Project Tracker</h1>
+      <div>
+        <label for="programmeSelect">Select Programme:</label>
+        <select id="programmeSelect" v-model="selectedProgrammeId" @change="onProgrammeChange">
+          <option :value="null">--Select--</option>
+          <option v-for="prog in programmes" :value="prog.id" :key="prog.id">
+            {{ prog.name }}
+          </option>
+        </select>
+      </div>
+      <div v-if="selectedProgramme">
+        <h2>Programme: {{ selectedProgramme.name }}</h2>
+        <!-- Add new module form -->
+        <div class="form-inline">
+          <input type="text" placeholder="New module name" v-model="newModuleName" />
+          <button @click="addModule">Add Module</button>
+        </div>
+        <!-- Display modules list -->
+        <ul>
+          <li v-for="module in selectedProgramme.modules" :key="module.id">
+            <strong>{{ module.name }}</strong>
+            <button @click="showModule(module)">View</button>
+            <!-- Add task form inline for module -->
+            <div class="form-inline">
+              <input
+                type="text"
+                placeholder="Task name"
+                v-model="taskForms[module.id].name"
+              />
+              <input type="date" v-model="taskForms[module.id].start" />
+              <input type="date" v-model="taskForms[module.id].end" />
+              <button @click="addTask(module)">Add Task</button>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <!-- Module view -->
+      <div v-if="currentModule">
+        <h2>Module: {{ currentModule.name }}</h2>
+        <button @click="currentModule=null">Back to modules</button>
+        <div id="gantt"></div>
+        <button @click="downloadChart">Download Chart as PNG</button>
+      </div>
+    </div>
+    <!-- Vue and dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.9/dayjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/frappe-gantt/0.5.0/frappe-gantt.min.js"></script>
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
