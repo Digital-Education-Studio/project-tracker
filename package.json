@@ -1,0 +1,11 @@
+{
+  "name": "project-tracker",
+  "version": "1.0.0",
+  "description": "Project tracker with Gantt chart visualisation",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
